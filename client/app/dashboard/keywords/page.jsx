@@ -12,7 +12,7 @@ export default function KeywordsPage() {
       setLoading(true);
 
       const response = await fetch(
-        "/api/keywords",
+        "http://localhost:5000/api/keywords",
         {
           method: "POST",
           headers: {
@@ -29,6 +29,25 @@ export default function KeywordsPage() {
 
       if (data.success) {
         setResult(data.data);
+        const userId =
+  localStorage.getItem("userId");
+
+await fetch(
+  "/assets/save",
+  {
+    method: "POST",
+    headers: {
+      "Content-Type":
+        "application/json",
+    },
+    body: JSON.stringify({
+      userId,
+      type: "keyword",
+      input: topic,
+      output: data.data,
+    }),
+  }
+);
       }
     } catch (error) {
       console.log(error);
