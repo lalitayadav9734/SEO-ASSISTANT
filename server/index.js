@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import { GoogleGenerativeAI } from "@google/generative-ai";
-
+import register from "./routes/register"
 dotenv.config();
 
 const app = express();
@@ -52,7 +52,7 @@ app.post("/api/keywords", async (req, res) => {
     });
   }
 });
-
+app.post("/api/register",register)
 app.listen(5000, () => {
   console.log("Server running on port 5000");
 });
