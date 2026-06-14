@@ -1,10 +1,8 @@
-import { connectDB } from "@/lib/mongodb";
-import User from "@/models/User";
+import User from "../../models/User.js";
+console.log("SETUP FILE LOADED");
 
-export async function POST(req) {
+export default async function setup(req, res) {
   try {
-    await connectDB();
-
     const {
       userId,
       websiteName,
@@ -13,54 +11,34 @@ export async function POST(req) {
       targetCountry,
       targetAudience,
       primaryKeywords,
-    } = await req.json();
+    } = req.body;
 
-    const updatedUser =
-      await User.findByIdAndUpdate(
-        userId,
-        {
-          websiteName,
-          websiteUrl,
-          industry,
-          targetCountry,
-          targetAudience,
-          primaryKeywords,
-        },
-        {
-          new: true,
-        }
-      );
+    const user = await User.findByIdAndUpdate(
+      userId,
+      {
+        websiteName,
+        websiteUrl,
+        industry,
+        targetCountry,
+        targetAudience,
+        primaryKeywords,
+      },
+      {
+        new: true,
+      }
+    );
 
-    if (!updatedUser) {
-      return Response.json(
-        {
-          success: false,
-          message: "User not found",
-        },
-        {
-          status: 404,
-        }
-      );
-    }
-
-    return Response.json({
+    return res.json({
       success: true,
-      message:
-        "Website setup completed",
-      user: updatedUser,
+      message: "Setup Saved",
+      user,
     });
   } catch (error) {
     console.log(error);
 
-    return Response.json(
-      {
-        success: false,
-        message:
-          "Internal Server Error",
-      },
-      {
-        status: 500,
-      }
-    );
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+    });
   }
 }

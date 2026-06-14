@@ -1,34 +1,65 @@
 "use client";
-
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function SetupPage() {
-  const [formData, setFormData] = useState({
-    websiteName: "",
-    websiteUrl: "",
-    industry: "",
-    targetCountry: "",
-    targetAudience: "",
-    primaryKeywords: "",
-  });
-
+  const[formData,setFormData] = useState({
+     websiteName: "",
+      websiteUrl: "",
+      industry: "",
+      targetCountry:"",
+      targetAudience: "",
+      primaryKeywords: "",
+  })
+  const router = useRouter();
   const handleChange = (e) => {
-    setFormData((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
-  };
+    setFormData({...formData,[e.target.name]:e.target.value})
+  }
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+ const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    console.log(formData);
+  if (!validate()) return;
 
-    // Later:
-    // POST -> /api/setup
-    // Save to MongoDB
-    // Redirect -> /dashboard
-  };
+  setLoading(true);
+
+  try {
+    const payload = {
+      websiteName: formData.websiteName.trim(),
+      websiteUrl: formData.websiteUrl.trim(),
+      industry: formData.industry.trim(),
+      targetCountry: formData.targetCountry.trim(),
+      targetAudience: formData.targetAudience.trim(),
+      primaryKeywords: formData.primaryKeywords.trim(),
+    };
+
+    const res = await fetch("http://localhost:5000/api/setup", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.message || "Failed to save data");
+    }
+
+    console.log("Server response:", data);
+
+    alert("Setup saved successfully!");
+    
+    router.push("/dashboard");
+
+  } catch (err) {
+    console.error(err);
+    alert(err.message || "Something went wrong");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-100 p-6">

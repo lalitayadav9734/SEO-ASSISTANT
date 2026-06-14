@@ -1,11 +1,14 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import cookieParser from "cookie-parser";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 import { connectDB } from "./config/mongodb.js";
 import register from "./routes/register/route.js";
 import login from "./routes/login/route.js";
+// import user from "./routes/user/route.js"
+import setup from "./routes/setup/route.js"
 
 dotenv.config();
 
@@ -15,6 +18,7 @@ connectDB();
 
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
 
 const genAI = new GoogleGenerativeAI(
   process.env.GEMINI_API_KEY
@@ -57,7 +61,8 @@ ${topic}
     });
   }
 });
-
+// app.use("/api/users",user)
+app.post("/api/setup", setup)
 app.post("/api/register", register);
 app.post("/api/login",login)
 

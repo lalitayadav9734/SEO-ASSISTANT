@@ -1,6 +1,9 @@
+"use client"
 import { useState } from "react"
+import { useRouter } from "next/navigation";
+export default function register(){
+  const router = useRouter();
 
-function register(){
 const [formData,setFormData] = useState({
   name:'',
   email:'',
@@ -25,35 +28,47 @@ const handleSubmit = async(e) => {
     )
     const data = await response.json()
     alert(data.message);
+    if (data.success) {
+  router.push("/login");
+}
   }catch(error){
     console.log(error)
   }
 }
 
-  return(
-      <div className="p-10">
-      <h1 className="text-3xl font-bold mb-5">
-        Register
+  return (
+  <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-white to-indigo-50 px-4">
+
+    <div className="w-full max-w-md bg-white/80 backdrop-blur-xl border border-gray-200 shadow-xl rounded-2xl p-8">
+
+      {/* Title */}
+      <h1 className="text-3xl font-bold text-center mb-2">
+        Create Account
       </h1>
+
+      <p className="text-center text-gray-500 mb-8 text-sm">
+        Join AI SEO Assistant and start optimizing your website
+      </p>
 
       <form
         onSubmit={handleSubmit}
-        className="flex flex-col gap-4 max-w-md"
+        className="flex flex-col gap-4"
       >
+
         <input
           type="text"
           name="name"
-          placeholder="Name"
+          placeholder="Full Name"
           onChange={handleChange}
-          className="border p-2"
+          className="border border-gray-200 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
         />
 
         <input
           type="email"
           name="email"
-          placeholder="Email"
+          placeholder="Email Address"
           onChange={handleChange}
-          className="border p-2"
+          className="border border-gray-200 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
         />
 
         <input
@@ -61,16 +76,24 @@ const handleSubmit = async(e) => {
           name="password"
           placeholder="Password"
           onChange={handleChange}
-          className="border p-2"
+          className="border border-gray-200 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
         />
 
         <button
           type="submit"
-          className="bg-black text-white p-2"
+          className="mt-2 bg-gradient-to-r from-black to-gray-800 text-white p-3 rounded-lg font-medium hover:scale-[1.02] transition"
         >
-          Register
+          Create Account
         </button>
+
       </form>
+
+      {/* Footer hint */}
+      <p className="text-center text-xs text-gray-400 mt-6">
+        By signing up, you agree to our terms and privacy policy
+      </p>
+
     </div>
-  )
+  </div>
+);
 }

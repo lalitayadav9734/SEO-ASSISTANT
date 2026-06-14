@@ -1,8 +1,9 @@
 "use client";
-
+import { useRouter } from "next/navigation";
 import { useState } from "react";
-
 export default function Login() {
+  const router = useRouter();
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -35,6 +36,9 @@ export default function Login() {
       console.log(data);
 
       alert(data.message);
+      if (data.success) {
+  router.push("/setup");
+}
     } catch (error) {
       console.log(error);
     }

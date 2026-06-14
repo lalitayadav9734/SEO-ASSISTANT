@@ -1,27 +1,32 @@
 import jwt from "jsonwebtoken";
-import { cookies } from "next/headers";
 
-export async function getUserFromToken() {
+export default function auth(
+  req,
+  res,
+  next
+) {
   try {
-    const cookieStore =
-      await cookies();
-
-    const token =
-      cookieStore.get("token")
-        ?.value;
+    const token = req.cookies.token;
 
     if (!token) {
-      return null;
+      return res.status(401).json({
+        success: false,
+        message: "Not authorized",
+      });
     }
 
-    const decoded =
-      jwt.verify(
-        token,
-        process.env.JWT_SECRET
-      );
+    const decoded = jwt.verify(
+      token,
+      process.env.JWT_SECRET
+    );
 
-    return decoded;
-  } catch {
-    return null;
+    req.user = decoded;
+
+    next();
+  } catch (error) {
+    return res.status(401).json({
+      success: false,
+      message: "Invalid token",
+    });
   }
 }
