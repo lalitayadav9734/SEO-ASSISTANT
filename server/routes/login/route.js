@@ -1,99 +1,76 @@
-import { connectDB } from "@/lib/mongodb";
+import { connectDB } from "../../config/mongodb.js";
 import jwt from "jsonwebtoken";
-import { cookies } from "next/headers";
-import User from "@/models/User";
+import User from "../../models/User.js";
 import bcrypt from "bcryptjs";
 
-export async function POST(req) {
+export default async function login(req, res) {
   try {
     await connectDB();
 
-    const { email, password } =
-      await req.json();
+    const { email, password } = req.body;
 
     if (!email || !password) {
-      return Response.json(
-        {
-          success: false,
-          message:
-            "Email and Password required",
-        },
-        {
-          status: 400,
-        }
-      );
+      return res.status(400).json({
+        success: false,
+        message: "Email and Password required",
+      });
     }
 
-    const user =
-      await User.findOne({
-        email,
-      });
+    const user = await User.findOne({
+      email,
+    });
 
     if (!user) {
-      return Response.json(
-        {
-          success: false,
-          message:
-            "User not found",
-        },
-        {
-          status: 404,
-        }
-      );
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
     }
 
-    const isMatch =
-      await bcrypt.compare(
-        password,
-        user.password
-      );
+    const isMatch = await bcrypt.compare(
+      password,
+      user.password
+    );
 
     if (!isMatch) {
-      return Response.json(
-        {
-          success: false,
-          message:
-            "Invalid Password",
-        },
-        {
-          status: 400,
-        }
-      );
+      return res.status(400).json({
+        success: false,
+        message: "Invalid Password",
+      });
     }
-const token = jwt.sign(
-  {
-    userId: user._id,
-    email: user.email,
-  },
-  process.env.JWT_SECRET,
-  {
-    expiresIn: "7d",
-  }
-);
-const cookieStore = await cookies();
 
-cookieStore.set("token", token, {
-  httpOnly: true,
-  secure: process.env.NODE_ENV === "production",
-  sameSite: "strict",
-  maxAge: 60 * 60 * 24 * 7,
-});
-   return Response.json({
-  success: true,
-  message: "Login Successful",
-});
+    const token = jwt.sign(
+      {
+        userId: user._id,
+        email: user.email,
+      },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "7d",
+      }
+    );
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure:
+        process.env.NODE_ENV ===
+        "production",
+      sameSite: "strict",
+      maxAge:
+        1000 * 60 * 60 * 24 * 7,
+    });
+
+    return res.json({
+      success: true,
+      message: "Login Successful",
+      token,
+    });
   } catch (error) {
     console.log(error);
 
-    return Response.json(
-      {
-        success: false,
-        message:
-          "Internal Server Error",
-      },
-      {
-        status: 500,
-      }
-    );
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+    });
   }
 }

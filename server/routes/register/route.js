@@ -1,38 +1,29 @@
-import { connectDB } from "@/lib/mongodb";
-import User from "@/models/User";
+import { connectDB } from "../../config/mongodb.js";
+import User from "../../models/user.js";
 import bcrypt from "bcryptjs";
 
-export async function POST(req) {
+export default async function register(req, res) {
   try {
     await connectDB();
 
-    const { name, email, password } =
-      await req.json();
+    const { name, email, password } = req.body;
 
     if (!name || !email || !password) {
-      return Response.json(
-        {
-          success: false,
-          message: "All fields are required",
-        },
-        { status: 400 }
-      );
+      return res.status(400).json({
+        success: false,
+        message: "All fields are required",
+      });
     }
 
-    const existingUser =
-      await User.findOne({
-        email,
-      });
+    const existingUser = await User.findOne({
+      email,
+    });
 
     if (existingUser) {
-      return Response.json(
-        {
-          success: false,
-          message:
-            "User already exists",
-        },
-        { status: 400 }
-      );
+      return res.status(400).json({
+        success: false,
+        message: "User already exists",
+      });
     }
 
     const hashedPassword =
@@ -41,26 +32,20 @@ export async function POST(req) {
     const user = await User.create({
       name,
       email,
-      password:
-        hashedPassword,
+      password: hashedPassword,
     });
 
-    return Response.json({
+    return res.json({
       success: true,
-      message:
-        "User created successfully",
+      message: "User created successfully",
       user,
     });
   } catch (error) {
     console.log(error);
 
-    return Response.json(
-      {
-        success: false,
-        message:
-          "Internal Server Error",
-      },
-      { status: 500 }
-    );
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+    });
   }
 }
