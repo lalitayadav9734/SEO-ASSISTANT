@@ -1,12 +1,8 @@
-import { cookies } from "next/headers";
+import express from "express";
+import  logout  from "../../controllers/logout.controller.js";
 
-export async function POST() {
-  const cookieStore =
-    await cookies();
+const router = express.Router();
 
-  cookieStore.delete("token");
+router.delete("/", logout);
 
-  return Response.json({
-    success: true,
-  });
-}
+export default router;

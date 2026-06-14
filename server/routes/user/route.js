@@ -1,24 +1,8 @@
-import User from "../../models/user.js";
+import express from "express";
+import user from "../../controllers/user.controller.js";
 
-export default async function user(
-  req,
-  res
-)
- 
-{
-  console.log("USER ROUTE HIT");
-  try {
-    const user = await User.findById(
-      req.user.userId
-    ).select("-password");
+const router = express.Router();
 
-    res.json({
-      success: true,
-      user,
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-    });
-  }
-}
+router.get("/", user);
+
+export default router;
