@@ -26,7 +26,11 @@ connectDB();
 
 // Middlewares
 app.use(cors({
-  origin: "http://localhost:3000",
+  origin:[
+"http://localhost:3000",
+"https://seo-assistant-zeta.vercel.app/",
+"https://seo-assistant-ticn.vercel.app/"
+] ,
   credentials: true,
 }));
 
