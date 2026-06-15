@@ -62,6 +62,7 @@ export default function SetupPage() {
 
       const res = await fetch("https://seo-backend-9783.onrender.com/api/setup", {
         method: "POST",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },

@@ -25,6 +25,7 @@ export default function Login() {
         "https://seo-backend-9783.onrender.com/api/login",
         {
           method: "POST",
+          credentials: "include",
           headers: {
             "Content-Type": "application/json",
           },
