@@ -14,6 +14,8 @@ import audit from "./routes/audit/route.js";
 import logout from "./routes/logout/route.js";
 import meta from "./routes/meta/route.js";
 import keywords from "./routes/keywords/route.js";
+import { errorMiddleware } from "./config/errorMiddleware.js";
+
 
 dotenv.config();
 
@@ -45,7 +47,7 @@ app.use("/api/meta", meta);
 app.use("/api/keywords",keywords);
 
 app.delete("/api/logout", logout);
-
+app.use(errorMiddleware);
 /*
   START SERVER
 */
