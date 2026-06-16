@@ -41,7 +41,7 @@ export default function Login() {
 
       alert(data.message);
       if (data.success) {
-  router.push("/setup");
+  router.push("/dashboard");
 }
     } catch (error) {
       setLoading(false)
