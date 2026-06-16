@@ -1,24 +1,31 @@
-import User from "../models/user.js";
+import User from "../models/User.js";
 
-export default async function user(
+export const getUser = async (
   req,
   res
-)
- 
-{
-  console.log("USER ROUTE HIT");
+) => {
   try {
     const user = await User.findById(
       req.user.userId
     ).select("-password");
 
-    res.json({
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    return res.json({
       success: true,
       user,
     });
   } catch (error) {
-    res.status(500).json({
+    console.log(error);
+
+    return res.status(500).json({
       success: false,
+      message: "Server Error",
     });
   }
-}
+};

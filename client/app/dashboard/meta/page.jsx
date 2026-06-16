@@ -14,7 +14,7 @@ export default function MetaPage() {
     try {
       setLoading(true);
 
-      const response = await fetch("https://seo-backend-9783.onrender.com//api/meta", {
+      const response = await fetch("https://seo-backend-9783.onrender.com/api/meta", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

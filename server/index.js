@@ -41,7 +41,7 @@ app.use(cookieParser());
   ROUTES
 */
 
-app.use("/api/users", user);
+app.use("/api/user", user);
 
 app.use("/api/register", register);
 app.use("/api/login", login);

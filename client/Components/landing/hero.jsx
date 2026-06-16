@@ -1,6 +1,21 @@
+"use client";
+import { useRouter } from "next/navigation";
 import { ArrowRight } from "lucide-react";
 
 export default function Hero() {
+  const router = useRouter();
+
+const handleDashboard = () => {
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    router.push("/login");
+    return;
+  }
+
+  router.push("/dashboard");
+};
+
   return (
     <section className="relative px-6 pt-24 pb-20 text-center bg-white border-b border-gray-100 overflow-hidden">
       <div className="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] opacity-40 pointer-events-none" />
@@ -33,7 +48,7 @@ export default function Hero() {
           </a>
 
           <a
-            href="/dashboard"
+            onClick={handleDashboard}
             className="w-full sm:w-auto border border-gray-200 bg-white font-medium text-gray-700 px-8 py-3.5 rounded-xl hover:bg-gray-50 hover:text-black transition-all duration-200 flex items-center justify-center"
           >
             View Dashboard

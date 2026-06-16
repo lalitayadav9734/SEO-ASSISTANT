@@ -25,7 +25,7 @@ export default function DashboardPage() {
       const userId = localStorage.getItem("userId");
       if (!userId) return;
 
-      const response = await fetch(`/api/user/${userId}`);
+      const response = await fetch(`https://seo-backend-9783.onrender.com/api/user/${userId}`);
       const data = await response.json();
 
       if (data.success) {

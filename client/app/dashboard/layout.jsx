@@ -14,6 +14,7 @@ import {
 export default function DashboardLayout({ children }) {
   const menuItems = [
     { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+    { name: "Audit", href: "/dashboard/audit", icon: Bot},
     { name: "Keywords", href: "/dashboard/keywords", icon: Search },
     { name: "Meta Generator", href: "/dashboard/meta", icon: FileText },
     { name: "Robots.txt", href: "/dashboard/robots", icon: Bot },
