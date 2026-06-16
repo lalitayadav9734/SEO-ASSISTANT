@@ -10,6 +10,7 @@ const [formData,setFormData] = useState({
   email:'',
   password:''
 })
+const[loading,setLoading] = useState(false);
 
 const handleChange = (e) => {
   setFormData({...formData,[e.target.name]:e.target.value})
@@ -18,6 +19,7 @@ const handleSubmit = async(e) => {
   e.preventDefault()
   
   try{
+    setLoading(true)
     const response = await fetch( "https://seo-backend-9783.onrender.com/api/register",
       {
           method: "POST",
@@ -33,6 +35,7 @@ const handleSubmit = async(e) => {
   router.push("/login");
 }
   }catch(error){
+    setLoading(false)
     console.log(error)
   }
 }
@@ -112,7 +115,9 @@ const handleSubmit = async(e) => {
             type="submit"
             className="w-full bg-black hover:bg-gray-900 text-white text-xs font-semibold py-3 rounded-xl shadow-md transition-all flex items-center justify-center gap-1.5 group mt-6"
           >
-            Initialize Workspace Profile
+            {loading
+    ? "Creating Account..."
+    : "Register"}
             <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-0.5 transition-transform" />
           </button>
         </form>

@@ -15,6 +15,7 @@ export default function KeywordsPage() {
 
       const response = await fetch("https://seo-backend-9783.onrender.com/api/keywords", {
         method: "POST",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },

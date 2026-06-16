@@ -15,6 +15,7 @@ export default function AuditPage() {
 
       const response = await fetch("https://seo-backend-9783.onrender.com/api/audit", {
         method: "POST",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },

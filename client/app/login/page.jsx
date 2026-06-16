@@ -9,6 +9,7 @@ export default function Login() {
     email: "",
     password: "",
   });
+  const[loading,setLoading] = useState(false);
 
   const handleChange = (e) => {
     setFormData({
@@ -21,6 +22,7 @@ export default function Login() {
     e.preventDefault();
 
     try {
+      setLoading(true)
       const response = await fetch(
         "https://seo-backend-9783.onrender.com/api/login",
         {
@@ -42,6 +44,7 @@ export default function Login() {
   router.push("/setup");
 }
     } catch (error) {
+      setLoading(false)
       console.log(error);
     }
   };
@@ -111,7 +114,7 @@ export default function Login() {
             type="submit"
             className="w-full bg-black hover:bg-gray-900 text-white text-xs font-semibold py-3 rounded-xl shadow-md transition-all flex items-center justify-center gap-1.5 group mt-6"
           >
-            Authenticate Profile Session
+           {loading ? "Signing In..." : "Login"}
             <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-0.5 transition-transform" />
           </button>
         </form>
